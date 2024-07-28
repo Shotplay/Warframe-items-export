@@ -8,6 +8,13 @@ const path_1 = __importDefault(require("path"));
 const lzma_purejs_1 = __importDefault(require("lzma-purejs"));
 const sync_1 = __importDefault(require("csv-stringify/sync"));
 const APIWarframeDataDir = path_1.default.resolve(__dirname, "APIWarframeData");
+async function addAdditional() {
+    const Files = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "AdditionalData"));
+    for (const file of Files) {
+        const data = fs_1.default.readFileSync(path_1.default.resolve(__dirname, "AdditionalData", file), "utf-8");
+        fs_1.default.writeFileSync(path_1.default.resolve(APIWarframeDataDir, file), data);
+    }
+}
 async function downloadWarframeData(locale) {
     if (!fs_1.default.existsSync(APIWarframeDataDir)) {
         fs_1.default.mkdirSync(APIWarframeDataDir);
@@ -54,6 +61,7 @@ async function generateCSV(locales) {
     const itemsArr = [];
     for (const locale of locales) {
         await downloadWarframeData(locale);
+        await addAdditional();
         const data = await readWarframeData(locale);
         itemsArr.push(data);
     }

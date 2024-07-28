@@ -5,6 +5,15 @@ import csv from "csv-stringify/sync";
 
 const APIWarframeDataDir = path.resolve(__dirname, "APIWarframeData");
 
+async function addAdditional() {
+  const Files = fs.readdirSync(path.resolve(__dirname, "AdditionalData"));
+
+  for (const file of Files) {
+    const data = fs.readFileSync(path.resolve(__dirname, "AdditionalData", file), "utf-8");
+    fs.writeFileSync(path.resolve(APIWarframeDataDir, file), data);
+  }
+}
+
 async function downloadWarframeData(locale: string): Promise<void> {
   if (!fs.existsSync(APIWarframeDataDir)) {
     fs.mkdirSync(APIWarframeDataDir);
@@ -62,6 +71,7 @@ async function generateCSV(locales: string[]): Promise<void> {
 
   for (const locale of locales) {
     await downloadWarframeData(locale);
+    await addAdditional();
     const data = await readWarframeData(locale);
     itemsArr.push(data);
   }

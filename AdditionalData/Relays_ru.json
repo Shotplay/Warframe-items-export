@@ -1,0 +1,56 @@
+[
+  {
+    "uniqueName": "EarthHUB",
+    "name": "Реле Strata",
+    "systemIndex": 2,
+    "systemName": "Земля"
+  },
+  {
+    "uniqueName": "VenusHUB",
+    "name": "Реле Vesper",
+    "systemIndex": 1,
+    "systemName": "Венера"
+  },
+  {
+    "uniqueName": "MercuryHUB",
+    "name": "Реле Larunda",
+    "systemIndex": 0,
+    "systemName": "Меркурий"
+  },
+  {
+    "uniqueName": "EuropeHUB",
+    "name": "Реле Leonov",
+    "systemIndex": 12,
+    "systemName": "Европа"
+  },
+  {
+    "uniqueName": "SaturnHUB",
+    "name": "Реле Kronia",
+    "systemIndex": 5,
+    "systemName": "Сатурн"
+  },
+  {
+    "uniqueName": "PlutoHUB",
+    "name": "Реле Orcus",
+    "systemIndex": 8,
+    "systemName": "Плутон"
+  },
+  {
+    "uniqueName": "ErisHUB",
+    "name": "Реле Kuiper",
+    "systemIndex": 10,
+    "systemName": "Эрида"
+  },
+  {
+    "uniqueName": "TennoConHUB2",
+    "name": "Реле TennoCon",
+    "systemIndex": 2,
+    "systemName": "Эрида"
+  },
+  {
+    "uniqueName": "TradeHUB1",
+    "name": "Базар Мэру",
+    "systemIndex": 3,
+    "systemName": "Марс"
+  }
+]

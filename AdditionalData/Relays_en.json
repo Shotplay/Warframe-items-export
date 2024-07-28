@@ -1,0 +1,56 @@
+[
+  {
+    "uniqueName": "EarthHUB",
+    "name": "Strata Relay",
+    "systemIndex": 2,
+    "systemName": "Earth"
+  },
+  {
+    "uniqueName": "VenusHUB",
+    "name": "Vesper Relay",
+    "systemIndex": 1,
+    "systemName": "Venus"
+  },
+  {
+    "uniqueName": "MercuryHUB",
+    "name": "Larunda Relay",
+    "systemIndex": 0,
+    "systemName": "Mercury"
+  },
+  {
+    "uniqueName": "EuropaHUB",
+    "name": "Leonov Relay",
+    "systemIndex": 12,
+    "systemName": "Europa"
+  },
+  {
+    "uniqueName": "SaturnHUB",
+    "name": "Kronia Relay",
+    "systemIndex": 5,
+    "systemName": "Saturn"
+  },
+  {
+    "uniqueName": "PlutoHUB",
+    "name": "Orcus Relay",
+    "systemIndex": 8,
+    "systemName": "Pluto"
+  },
+  {
+    "uniqueName": "ErisHUB",
+    "name": "Kuiper Relay",
+    "systemIndex": 10,
+    "systemName": "Eris"
+  },
+  {
+    "uniqueName": "TennoConHUB2",
+    "name": "TennoCon Relay",
+    "systemIndex": 2,
+    "systemName": "Earth"
+  },
+  {
+    "uniqueName": "TradeHUB1",
+    "name": "Maroo's Bazaar",
+    "systemIndex": 3,
+    "systemName": "Mars"
+  }
+]
