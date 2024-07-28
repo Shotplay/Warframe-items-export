@@ -73,14 +73,8 @@ export interface RecipesData {
   num: number;
   codexSecret: boolean;
   excludeFromCodex?: boolean;
-  ingredients: RecipesIngridientsData[];
+  ingredients: RecipesIngridients[];
   secretIngredients: [];
-}
-
-export interface RecipesIngridientsData {
-  ItemType: string;
-  ItemCount: number;
-  ProductCategory: string;
 }
 
 export interface RegionsData {
@@ -101,20 +95,9 @@ export interface RelicArcaneData {
   name: string;
   codexSecret: boolean;
   description?: string;
-  relicRewards?: RelicRewardsData[];
+  relicRewards?: RelicRewards[];
   rarity?: string;
-  levelStats?: levelStatsData[];
-}
-
-export interface RelicRewardsData {
-  rewardName: string;
-  rarity: string;
-  tier: number;
-  itemCount: number;
-}
-
-export interface levelStatsData {
-  stats: string[];
+  levelStats?: levelStats[];
 }
 
 export interface ResourcesData {
@@ -161,34 +144,10 @@ export interface UpgradesData {
   type?: string;
   description?: string[];
   excludeFromCodex?: boolean;
-  levelStats?: levelStatsData[];
+  levelStats?: levelStats[];
   subtype?: string;
-  upgradeEntries?: UpgradeEntriesData[];
-  availableChallenges?: ChallengesData[];
-}
-
-export interface UpgradeEntriesData {
-  tag: string;
-  prefixTag: string;
-  suffixTag: string;
-  upgradeValues: UpgradeValues[];
-}
-
-export interface UpgradeValues {
-  value: number;
-  locTag?: string;
-}
-
-export interface ChallengesData {
-  fullName: string;
-  description: string;
-  complications: ComplicationsData[];
-}
-
-export interface ComplicationsData {
-  fullName: string;
-  description: string;
-  overrideTag?: string;
+  upgradeEntries?: UpgradeEntries[];
+  availableChallenges?: Challenges[];
 }
 
 export interface WarframesData {
@@ -204,16 +163,10 @@ export interface WarframesData {
   codexSecret: boolean;
   masteryReq: number;
   sprintSpeed: number;
-  abilities: AbilitiesData[];
+  abilities: Abilities[];
   productCategory: string;
   longDescription?: string;
   passiveDescription?: string;
-}
-
-export interface AbilitiesData {
-  abilityUniqueName: string;
-  abilityName: string;
-  description: string;
 }
 
 export interface WeaponsData {
@@ -250,4 +203,51 @@ export interface WeaponsData {
   magazineSize?: number;
   reloadTime?: number;
   multishot?: number;
+}
+
+export interface Abilities {
+  abilityUniqueName: string;
+  abilityName: string;
+  description: string;
+}
+export interface UpgradeEntries {
+  tag: string;
+  prefixTag: string;
+  suffixTag: string;
+  upgradeValues: UpgradeValues[];
+}
+
+export interface UpgradeValues {
+  value: number;
+  locTag?: string;
+}
+
+export interface Challenges {
+  fullName: string;
+  description: string;
+  complications: Complications[];
+}
+
+export interface Complications {
+  fullName: string;
+  description: string;
+  overrideTag?: string;
+}
+
+export interface RelicRewards {
+  rewardName: string;
+  rarity: string;
+  tier: number;
+  itemCount: number;
+}
+
+export interface levelStats {
+  stats: string[];
+}
+
+
+export interface RecipesIngridients {
+  ItemType: string;
+  ItemCount: number;
+  ProductCategory: string;
 }
