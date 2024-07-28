@@ -15,4 +15,18 @@ Usage:
  - Run generate.ts or generate.js
 
 Avaible Languages:
-https://warframe.fandom.com/wiki/Languages
+ https://warframe.fandom.com/wiki/Languages
+
+Additional Items:
+ The public warframe export doesn't include all the data you'd like, such as relays, so you can add them yourself.
+
+ To do this:
+  - Create a json file in the AdditionalData folder
+  - View the example in the TemplateAdditionalJSON file
+  - Add the data you want
+  - Done
+
+P.S. It already contains two files with relay names in Russian and English.
+
+Types:
+If you are using `Typescript`, there is a file for you in the @types folder describing all data types
