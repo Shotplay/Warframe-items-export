@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/node": "^22.0.0",
+    "csv-stringify": "^6.5.1",
+    "lzma-purejs": "^0.9.3"
+  }
+}
