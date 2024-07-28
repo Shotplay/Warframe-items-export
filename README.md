@@ -7,7 +7,7 @@ Install:
 
 Usage:
  - Open file generate.ts for Typescript or generate.js for JavaScript
- - At the very bottom of the file, change the arguments of the generateCSV function to the code locales of your language
+ - At the very bottom of the file, change the arguments of the generateCSV function to the code locales of your language(s)
  - Run generate.ts or generate.js
 
 Avaible Languages:
