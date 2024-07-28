@@ -11,4 +11,4 @@ Usage:
  - Run generate.ts or generate.js
 
 Avaible Languages:
-https://warframe.fandom.com/wiki/Public_Export#Available%20Languages
+https://warframe.fandom.com/wiki/Languages
