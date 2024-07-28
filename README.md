@@ -1,4 +1,4 @@
-Optional:
+Optional require:
   - `Typescript`
 
 Install:
