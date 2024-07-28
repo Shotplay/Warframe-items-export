@@ -21,7 +21,7 @@
 The public warframe export doesn't include all the data you'd like, such as relays, so you can add them yourself.
 
  To do this:
-  - Create a json file in the AdditionalData folder
+  - Create a json file of type `Data_langcode.json` in the AdditionalData folder
   - View the example in the TemplateAdditionalJSON file
   - Add the data you want
   - Done
