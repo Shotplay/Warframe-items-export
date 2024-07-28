@@ -3,6 +3,7 @@ Optional require:
 
 Install:
  - In your directory `git clone https://github.com/Shotplay/Warframe-items-CSV.git`
+ - `cd Warframe-items-CSV`
  - `npm i`
 
 Usage:
