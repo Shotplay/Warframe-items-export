@@ -83,5 +83,7 @@ async function generateCSV(locales) {
     await Promise.all(files.map((file) => fs_1.default.unlinkSync(path_1.default.resolve(APIWarframeDataDir, file))));
     fs_1.default.rmdirSync(APIWarframeDataDir);
 }
-generateCSV(["ru", "en"]).catch((err) => console.error(err));
+generateCSV(["ru", "en"])
+    .then(() => console.log(`File created! ${path_1.default.resolve(__dirname, "Output", "output.csv")}`))
+    .catch((err) => console.error(err));
 //# sourceMappingURL=generate.js.map

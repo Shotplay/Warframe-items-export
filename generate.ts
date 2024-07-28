@@ -98,5 +98,7 @@ async function generateCSV(locales: string[]): Promise<void> {
   fs.rmdirSync(APIWarframeDataDir);
 }
 
-generateCSV(["ru", "en"]).catch((err) => console.error(err));
+generateCSV(["ru", "en"])
+  .then(() => console.log(`File created! ${path.resolve(__dirname, "Output", "output.csv")}`))
+  .catch((err) => console.error(err));
 // GenerateCSV([locales])
