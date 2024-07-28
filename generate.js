@@ -29,13 +29,23 @@ async function downloadWarframeData(locale) {
         .toString()
         .split("\n")
         .map((item) => item.replace(/\r/g, ""));
+    let locked = 0;
     await Promise.all(arrFetching.map(async (fetching) => {
         try {
             const response = await fetch(`https://content.warframe.com/PublicExport/Manifest/${fetching}`);
             const data = await response.text();
             const urlFetching = fetching.replace("Export", "").replace(/\.json.*/, "");
             const firstKey = !fetching.includes("Manifest") ? fetching.replace(/_.*/g, "") : fetching.replace("Export", "").replace(/\..*/g, "");
-            const parsed = JSON.parse(data.replace(/\r/g, "\\r").replace(/\n/g, "\\n"))[firstKey];
+            const parsed = JSON.parse(data.replace(/\r/g, "\\r").replace(/\n/g, "\\n"))[firstKey].filter((data) => {
+                if (data.uniqueName !== "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" || locked < 1) {
+                    if (data.uniqueName === "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun")
+                        locked++;
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
             const stringified = JSON.stringify(parsed, null, 2);
             fs_1.default.writeFileSync(path_1.default.resolve(APIWarframeDataDir, `${urlFetching}.json`), stringified);
         }
