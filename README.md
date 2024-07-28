@@ -2,7 +2,7 @@ Optional:
   - `Typescript`
 
 Install:
- - In your directory `git clone https://github.com/Shotplay/Warframe-items-CSV`
+ - In your directory `git clone https://github.com/Shotplay/Warframe-items-CSV.git`
  - `npm i`
 
 Usage:
