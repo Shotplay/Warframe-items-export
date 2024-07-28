@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import lzma from "lzma-purejs";
-import csv from "csv-stringify";
+import csv from "csv-stringify/sync";
 
 const APIWarframeDataDir = path.resolve(__dirname, "APIWarframeData");
 
@@ -91,7 +91,7 @@ async function generateCSV(locales: string[]): Promise<void> {
     quoted_string: true,
   });
 
-  fs.writeFileSync(path.resolve(__dirname, "Output/output.csv"), String(csvString), "utf-8");
+  fs.writeFileSync(path.resolve(__dirname, "Output/output.csv"), csvString, "utf-8");
 
   const files = fs.readdirSync(APIWarframeDataDir);
   await Promise.all(files.map((file) => fs.unlinkSync(path.resolve(APIWarframeDataDir, file))));

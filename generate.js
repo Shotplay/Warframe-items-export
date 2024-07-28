@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const lzma_purejs_1 = __importDefault(require("lzma-purejs"));
-const csv_stringify_1 = __importDefault(require("csv-stringify"));
+const sync_1 = __importDefault(require("csv-stringify/sync"));
 const APIWarframeDataDir = path_1.default.resolve(__dirname, "APIWarframeData");
 async function downloadWarframeData(locale) {
     if (!fs_1.default.existsSync(APIWarframeDataDir)) {
@@ -74,11 +74,11 @@ async function generateCSV(locales) {
         }
         return obj;
     });
-    const csvString = csv_stringify_1.default.stringify(csvData, {
+    const csvString = sync_1.default.stringify(csvData, {
         header: true,
         quoted_string: true,
     });
-    fs_1.default.writeFileSync(path_1.default.resolve(__dirname, "Output/output.csv"), String(csvString), "utf-8");
+    fs_1.default.writeFileSync(path_1.default.resolve(__dirname, "Output/output.csv"), csvString, "utf-8");
     const files = fs_1.default.readdirSync(APIWarframeDataDir);
     await Promise.all(files.map((file) => fs_1.default.unlinkSync(path_1.default.resolve(APIWarframeDataDir, file))));
     fs_1.default.rmdirSync(APIWarframeDataDir);
