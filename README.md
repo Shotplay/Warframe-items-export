@@ -25,4 +25,4 @@ The public warframe export doesn't include all the data you'd like, such as rela
   - Add the data you want
   - Done
 
-P.S. It already contains two files with some relays names in Russian and English
+P.S. It already contains few files with some names in Russian and English
