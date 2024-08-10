@@ -1,6 +1,6 @@
 {
   "name": "warframe-items-csv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generates csv file/Buffer/Array for warframe items from PublicExport",
   "main": "build/generate",
   "types": "build/",
