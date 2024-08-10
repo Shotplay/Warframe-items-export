@@ -10,7 +10,7 @@ generateCSV(["ru", "en"])
 //  {
 //   uniqueName: '/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem'
 //   jsonDataRU: '{"uniqueName":"/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem","name":"Сандана: Изорванное знамя","codexSecret":false,"description": "Злите солдат Гринир, используя их собственное знамя."}'
-//   jsonDataEN: '{"uniqueName":"/Lotus/Upgrades/Skins/AntiMatter/NovaDeluxeSuit","name":"Nova Asuri Skin","codexSecret":false,"description":"Ascend and become the legendary many-armed warrior of Asuri."}'
+//   jsonDataEN: '{"uniqueName":"/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem","name":"Vanquished Banner","codexSecret":false,"description":"Add insult to injury by mocking the Grineer with their own banner."}'
 //  }...
 //]
 
