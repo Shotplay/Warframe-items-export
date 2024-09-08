@@ -1,5 +1,5 @@
 {
-  "name": "warframe-items-csv",
+  "name": "warframe-items-export",
   "version": "1.1.0",
   "description": "Generates CSV/SQL file for warframe items from PublicExport",
   "main": "build/generate",
