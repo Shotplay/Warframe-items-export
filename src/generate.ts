@@ -4,7 +4,6 @@ import path from "path";
 import lzma from "lzma-purejs";
 import Progress from "cli-progress";
 import csv from "csv-stringify/sync";
-import { buffer } from "stream/consumers";
 
 const bar = new Progress.Bar({
   format: "[{bar}] {percentage}% | ETA: {eta}s | {value}/{total}",
@@ -126,17 +125,11 @@ async function generateData(locales: string[], typeReturn: string = "CSV"): Prom
 
   bar.start(itemsArr.flat().length / itemsArr.length, 0);
 
-  const csvDatas: {
-    uniqueName: string;
-    [jsonData: string]: string;
-  }[][] = [];
+  const csvDatas: csvData[][] = [];
   let uniqueNameLength = 0;
 
   for (const arr of itemsArr) {
-    let csvData: {
-      uniqueName: string;
-      [jsonData: string]: string;
-    }[] = [];
+    let csvData: csvData[] = [];
 
     await Promise.all(
       arr.map(async (data, indexMap) => {
