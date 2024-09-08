@@ -193,7 +193,9 @@ async function generateData(locales: string[], typeReturn: string = "CSV"): Prom
         ",\n  "
       )}\n);\nDELETE FROM \`warframeLocalizations\` WHERE 1;\n${insertions.join("\n")}`;
 
-      fs.writeFileSync(path.join(OutputDir, "output.sql"), data, "utf-8");
+      const outputSQLPath = path.join(OutputDir, "output.sql");
+      fs.writeFileSync(outputSQLPath, data, "utf-8");
+      console.log(`File created ${outputSQLPath}`);
       return data;
     }
     case "CSV": {
