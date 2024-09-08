@@ -1,13 +1,14 @@
 import { csvData } from "../@types/csvData";
 /**
- * - Create or return Buffer/Array CSV File Warframe Public Export Data
+ * - Create and/or return Array/CSV/SQL File Warframe Public Export Data
  * @param {string[]} locales
- * @param {string} [typeReturn] Buffer or Array
+ * @param {string} [typeReturn="CSV"] Buffer or Array
+ * @param {boolean} [DeleteDataIfExist=true] Only if typeReturn = "SQL". Does the request have to be a transaction? (I.e. either everything is transferred or nothing)
  * @return {*}  {(Promise<void | Buffer | csvData[]>)}
  * @example
- * GenerateCSV(["it", "ko"]) // create CSV file with column uniqueName, jsonDataIT, jsonDataKO in Output folder
- * GenerateCSV(["de", "es"], "Buffer") // return buffer CSV file with column uniqueName, jsonDataDE, jsonDataES
- * GenerateCSV(["ru", "en"], "Array") // return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
+ * generateData(["it", "ko"]) // create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
+ * generateData(["de", "es"], "SQL") // generate SQL file and return SQL file text with column uniqueName, jsonDataDE, jsonDataES
+ * generateData(["ru", "en"], "Array") // return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
  * //[
  * //  {
  * //   uniqueName: '/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem'
@@ -16,5 +17,5 @@ import { csvData } from "../@types/csvData";
  * //  }...
  * //]
  */
-declare function generateCSV(locales: string[], typeReturn?: string): Promise<void | Buffer | csvData[]>;
-export { generateCSV };
+declare function generateData(locales: string[], typeReturn?: string): Promise<string | csvData[]>;
+export { generateData };

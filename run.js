@@ -1,11 +1,11 @@
-const { generateCSV } = require("./build/generate.js");
+const { generateData } = require("./build/generate.js");
 
-generateCSV(["ru", "en"])
+generateData(["ru", "en"], "SQL");
 
-// GenerateCSV([locales])
-// GenerateCSV(["it", "ko"])  create CSV file with column uniqueName, jsonDataIT, jsonDataKO in Output folder
-// GenerateCSV(["de", "es"], "Buffer")  return buffer CSV file with column uniqueName, jsonDataDE, jsonDataES
-// GenerateCSV(["ru", "en"], "Array")  return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
+// generateData([locales])
+// generateData(["it", "ko"])  create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
+// generateData(["de", "es"], "SQL")  generate SQL file and return SQL file text with column uniqueName, jsonDataDE, jsonDataES
+// generateData(["ru", "en"], "Array")  return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
 //[
 //  {
 //   uniqueName: '/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem'
@@ -13,4 +13,3 @@ generateCSV(["ru", "en"])
 //   jsonDataEN: '{"uniqueName":"/Lotus/Characters/Tenno/Accessory/Scarves/GrnBannerScarf/GrnBannerScarfItem","name":"Vanquished Banner","codexSecret":false,"description":"Add insult to injury by mocking the Grineer with their own banner."}'
 //  }...
 //]
-
