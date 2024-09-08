@@ -8,9 +8,9 @@
 
 ### **Usage:**
  - Open file run.js
- - Change the arguments of the generateCSV function to the code locales of your language(s)
+ - Change the arguments of the generateData function to the code locales of your language(s)
  - Run `node run.js`
-
+   
 P.S. In case the data is not found, it will be marked as "undefined"
 
 ### **Avaible Languages:**
