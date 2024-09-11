@@ -107,7 +107,7 @@ async function readWarframeData(locale: string): Promise<any[]> {
  * - Create and/or return Array/CSV/SQL File Warframe Public Export Data
  * @param {string[]} locales
  * @param {string} [typeReturn="CSV"] Buffer or Array
- * @param {boolean} [DeleteDataIfExist=true] Only if typeReturn = "SQL". Does the request have to be a transaction? (I.e. either everything is transferred or nothing)
+ * @param {boolean} [mysql=false] Update duplicate for mysql
  * @return {*}  {(Promise<void | Buffer | csvData[]>)}
  * @example
  * generateData(["it", "ko"]) // create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
@@ -122,12 +122,17 @@ async function readWarframeData(locale: string): Promise<any[]> {
  * //]
  */
 
-async function generateData(locales: string[], typeReturn: string = "CSV"): Promise<string | csvData[]> {
+async function generateData(
+  locales: string[],
+  typeReturn: string = "CSV",
+  mysql: boolean = false
+): Promise<string | csvData[]> {
   const itemsArr: any[][] = [];
 
   console.log("Wait collecting information...");
+  deleteDir();
+
   for (const locale of locales) {
-    deleteDir();
     await downloadWarframeData(locale);
     await addAdditional();
     const data = await readWarframeData(locale);
@@ -200,9 +205,13 @@ async function generateData(locales: string[], typeReturn: string = "CSV"): Prom
 
         return `INSERT INTO \`warframeLocalizations\` (\`${columns.join("`,`")}\`) VALUES ('${dataColumns
           .map((string) => string.replace(/'/gm, "\\'"))
-          .join("','")}') ON DUPLICATE KEY UPDATE ${columns
-          .map((column, index) => `\`${column}\`=VALUES('${dataColumns[index]}')`)
-          .join(",")};`;
+          .join("','")}') ${
+          mysql
+            ? ` ON DUPLICATE KEY UPDATE ${columns
+                .map((column, index) => `\`${column}\`=VALUES('${dataColumns[index]}')`)
+                .join(",")}`
+            : ""
+        };`;
       });
 
       const tables = locales.map((locale) => `\`jsonData${locale.toUpperCase()}\` TEXT NOT NULL`);

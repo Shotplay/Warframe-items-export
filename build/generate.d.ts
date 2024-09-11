@@ -3,7 +3,7 @@ import { csvData } from "../@types/csvData";
  * - Create and/or return Array/CSV/SQL File Warframe Public Export Data
  * @param {string[]} locales
  * @param {string} [typeReturn="CSV"] Buffer or Array
- * @param {boolean} [DeleteDataIfExist=true] Only if typeReturn = "SQL". Does the request have to be a transaction? (I.e. either everything is transferred or nothing)
+ * @param {boolean} [mysql=false] Update duplicate for mysql
  * @return {*}  {(Promise<void | Buffer | csvData[]>)}
  * @example
  * generateData(["it", "ko"]) // create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
@@ -17,5 +17,5 @@ import { csvData } from "../@types/csvData";
  * //  }...
  * //]
  */
-declare function generateData(locales: string[], typeReturn?: string): Promise<string | csvData[]>;
+declare function generateData(locales: string[], typeReturn?: string, mysql?: boolean): Promise<string | csvData[]>;
 export { generateData };
