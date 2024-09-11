@@ -8,6 +8,7 @@ import { csvData } from "../@types/csvData";
  * @example
  * generateData(["it", "ko"]) // create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
  * generateData(["de", "es"], "SQL") // generate SQL file and return SQL file text with column uniqueName, jsonDataDE, jsonDataES
+ * generateData(["de", "es"], "SQL", true) // Does the same as above, but adds duplicate update for mysql
  * generateData(["ru", "en"], "Array") // return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
  * //[
  * //  {
