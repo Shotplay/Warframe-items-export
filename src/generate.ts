@@ -44,9 +44,7 @@ async function addAdditional() {
 
 async function downloadWarframeData(locale: string): Promise<void> {
   if (!fs.existsSync(APIWarframeDataDir)) fs.mkdirSync(APIWarframeDataDir);
-  const response = await fetch(
-    `https://origin.warframe.com/PublicExport/index_${locale}.txt.lzma`
-  );
+  const response = await fetch(`https://origin.warframe.com/PublicExport/index_${locale}.txt.lzma`);
   const data = await response.arrayBuffer();
   const decompressedData = lzma.decompressFile(Buffer.from(data));
   const arrFetching = Buffer.from(decompressedData)
@@ -59,28 +57,18 @@ async function downloadWarframeData(locale: string): Promise<void> {
   await Promise.all(
     arrFetching.map(async (fetching) => {
       try {
-        const response = await fetch(
-          `https://content.warframe.com/PublicExport/Manifest/${fetching}`
-        );
+        const response = await fetch(`https://content.warframe.com/PublicExport/Manifest/${fetching}`);
         const data = await response.text();
-        const urlFetching = fetching
-          .replace("Export", "")
-          .replace(/\.json.*/, "");
+        const urlFetching = fetching.replace("Export", "").replace(/\.json.*/, "");
         const firstKey = !fetching.includes("Manifest")
           ? fetching.replace(/_.*/g, "")
           : fetching.replace("Export", "").replace(/\..*/g, "");
-        const parsed = JSON.parse(
-          data.replace(/\r/g, "\\r").replace(/\n/g, "\\n")
-        )[firstKey].filter((data) => {
+        const parsed = JSON.parse(data.replace(/\r/g, "\\r").replace(/\n/g, "\\n"))[firstKey].filter((data) => {
           if (
-            data.uniqueName !==
-              "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" ||
+            data.uniqueName !== "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" ||
             locked < 1
           ) {
-            if (
-              data.uniqueName ===
-              "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun"
-            )
+            if (data.uniqueName === "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun")
               locked++;
             return true;
           } else {
@@ -89,10 +77,7 @@ async function downloadWarframeData(locale: string): Promise<void> {
         });
         const stringified = JSON.stringify(parsed, null, 2);
 
-        fs.writeFileSync(
-          path.resolve(APIWarframeDataDir, `${urlFetching}.json`),
-          stringified
-        );
+        fs.writeFileSync(path.resolve(APIWarframeDataDir, `${urlFetching}.json`), stringified);
       } catch (err) {
         console.error(err);
       }
@@ -107,10 +92,7 @@ async function readWarframeData(locale: string): Promise<any[]> {
   const allInOne: any[] = [];
 
   for (const file of localizatedFiles) {
-    const data = fs.readFileSync(
-      path.resolve(APIWarframeDataDir, file),
-      "utf-8"
-    );
+    const data = fs.readFileSync(path.resolve(APIWarframeDataDir, file), "utf-8");
     const parsed = JSON.parse(data);
 
     if (Array.isArray(parsed)) {
@@ -140,10 +122,7 @@ async function readWarframeData(locale: string): Promise<any[]> {
  * //]
  */
 
-async function generateData(
-  locales: string[],
-  typeReturn: string = "CSV"
-): Promise<string | csvData[]> {
+async function generateData(locales: string[], typeReturn: string = "CSV"): Promise<string | csvData[]> {
   const itemsArr: any[][] = [];
 
   console.log("Wait collecting information...");
@@ -168,16 +147,9 @@ async function generateData(
         const obj: any = {
           uniqueName: data.uniqueName || data.rewardName,
         };
-        if (
-          csvDatas.some((dataDatasArr) =>
-            dataDatasArr.some(
-              (dataDatas) => dataDatas.uniqueName === obj.uniqueName
-            )
-          )
-        )
+        if (csvDatas.some((dataDatasArr) => dataDatasArr.some((dataDatas) => dataDatas.uniqueName === obj.uniqueName)))
           return;
-        if (obj.uniqueName.length > uniqueNameLength)
-          uniqueNameLength = obj.uniqueName.length;
+        if (obj.uniqueName.length > uniqueNameLength) uniqueNameLength = obj.uniqueName.length;
 
         countValue++;
         bar.update(countValue);
@@ -213,9 +185,7 @@ async function generateData(
   bar.stop();
 
   const files = fs.readdirSync(APIWarframeDataDir);
-  await Promise.all(
-    files.map((file) => fs.unlinkSync(path.resolve(APIWarframeDataDir, file)))
-  );
+  await Promise.all(files.map((file) => fs.unlinkSync(path.resolve(APIWarframeDataDir, file))));
   fs.rmdirSync(APIWarframeDataDir);
 
   switch (typeReturn) {
@@ -224,22 +194,21 @@ async function generateData(
     }
     case "SQL": {
       const flatted = csvDatas.flat();
-      const insertions = flatted.map(
-        (data) =>
-          `INSERT INTO \`warframeLocalizations\`(\`${Object.keys(data).join(
-            "`,`"
-          )}\`) VALUES ('${(Object.values(data) as string[])
-            .map((string) => string.replace(/'/gm, "\\'"))
-            .join("','")}');`
-      );
-      const tables = locales.map(
-        (locale) => `\`jsonData${locale.toUpperCase()}\` TEXT NOT NULL`
-      );
-      const data = `-- Generated by https://github.com/Shotplay/Warframe-items-export\nCREATE TABLE IF NOT EXISTS \`warframeLocalizations\`(\n  \`uniqueName\` VARCHAR(${uniqueNameLength}) NOT NULL PRIMARY KEY,\n  ${tables.join(
-        ",\n  "
-      )}\n);\nDELETE FROM \`warframeLocalizations\` WHERE 1;\n${insertions.join(
-        "\n"
-      )}`;
+      const insertions = flatted.map((data) => {
+        const columns = Object.keys(data);
+        const dataColumns = Object.values(data) as string[];
+
+        return `INSERT INTO \`warframeLocalizations\` (\`${columns.join("`,`")}\`) VALUES ('${dataColumns
+          .map((string) => string.replace(/'/gm, "\\'"))
+          .join("','")}') ON DUPLICATE KEY UPDATE ${columns
+          .map((column, index) => `\`${column}\`=VALUES('${dataColumns[index]}')`)
+          .join(",")};`;
+      });
+
+      const tables = locales.map((locale) => `\`jsonData${locale.toUpperCase()}\` TEXT NOT NULL`);
+      const data = `-- Generated by https://github.com/Shotplay/Warframe-items-export\nCREATE TABLE IF NOT EXISTS \`warframeLocalizations\`(\`uniqueName\` VARCHAR(${uniqueNameLength}) NOT NULL PRIMARY KEY,${tables.join(
+        ","
+      )});\n${insertions.join("\n")}`;
 
       const outputSQLPath = path.join(OutputDir, "output.sql");
       fs.writeFileSync(outputSQLPath, data, "utf-8");
