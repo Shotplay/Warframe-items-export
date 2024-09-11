@@ -19,6 +19,10 @@ const APIWarframeDataDir = path_1.default.resolve(__dirname, "APIWarframeData");
 const OutputDir = path_1.default.resolve(__dirname, "..", "Output");
 const AdditionalDataDir = path_1.default.resolve(__dirname, "..", "AdditionalData");
 function deleteDir() {
+    if (!fs_1.default.existsSync(OutputDir)) {
+        fs_1.default.mkdirSync(OutputDir);
+        return;
+    }
     const files = fs_1.default.readdirSync(OutputDir);
     for (const file of files) {
         fs_1.default.unlinkSync(path_1.default.join(OutputDir, file));
@@ -48,11 +52,18 @@ async function downloadWarframeData(locale) {
         try {
             const response = await fetch(`https://content.warframe.com/PublicExport/Manifest/${fetching}`);
             const data = await response.text();
-            const urlFetching = fetching.replace("Export", "").replace(/\.json.*/, "");
-            const firstKey = !fetching.includes("Manifest") ? fetching.replace(/_.*/g, "") : fetching.replace("Export", "").replace(/\..*/g, "");
+            const urlFetching = fetching
+                .replace("Export", "")
+                .replace(/\.json.*/, "");
+            const firstKey = !fetching.includes("Manifest")
+                ? fetching.replace(/_.*/g, "")
+                : fetching.replace("Export", "").replace(/\..*/g, "");
             const parsed = JSON.parse(data.replace(/\r/g, "\\r").replace(/\n/g, "\\n"))[firstKey].filter((data) => {
-                if (data.uniqueName !== "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" || locked < 1) {
-                    if (data.uniqueName === "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun")
+                if (data.uniqueName !==
+                    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" ||
+                    locked < 1) {
+                    if (data.uniqueName ===
+                        "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun")
                         locked++;
                     return true;
                 }
