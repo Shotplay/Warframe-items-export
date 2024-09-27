@@ -2,9 +2,9 @@
  - `Node.js`
 
 ### **Install:**
- - In your directory `git clone https://github.com/Shotplay/Warframe-items-CSV.git`
- - `cd Warframe-items-CSV`
- - `npm i`
+ - In your directory `git clone https://github.com/Shotplay/Warframe-items-export.git`
+ - `cd Warframe-items-export`
+ - `npm i --omit=dev`
 
 ### **Usage:**
  - Open file run.js
