@@ -4,7 +4,7 @@
 ### **Install:**
  - In your directory `git clone https://github.com/Shotplay/Warframe-items-export.git`
  - `cd Warframe-items-export`
- - `npm i --omit=dev`
+ - `npm install --omit=dev`
 
 ### **Usage:**
  - Open file run.js
