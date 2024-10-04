@@ -1,7 +1,10 @@
+import { deleteDir } from "./deleteDir";
+import { downloadWarframeData } from "./downloadData";
+import { addAdditionalData } from "./addAdditionalData";
+import { readWarframeData } from "./readData";
 import { csvData } from "../@types/csvData";
 import fs from "fs";
 import path from "path";
-import lzma from "lzma-purejs";
 import Progress from "cli-progress";
 import csv from "csv-stringify/sync";
 
@@ -13,104 +16,20 @@ const bar = new Progress.Bar({
 
 let countValue = 0;
 
-const APIWarframeDataDir = path.resolve(__dirname, "APIWarframeData");
-const OutputDir = path.resolve(__dirname, "..", "Output");
-const AdditionalDataDir = path.resolve(__dirname, "..", "AdditionalData");
-
-function deleteDir() {
-  if (!fs.existsSync(OutputDir)) {
-    fs.mkdirSync(OutputDir);
-    return;
-  }
-
-  const files = fs.readdirSync(OutputDir);
-
-  for (const file of files) {
-    fs.unlinkSync(path.join(OutputDir, file));
-  }
-
-  fs.rmdirSync(OutputDir);
-  fs.mkdirSync(OutputDir);
-}
-
-async function addAdditional() {
-  const Files = fs.readdirSync(AdditionalDataDir);
-
-  for (const file of Files) {
-    const data = fs.readFileSync(path.join(AdditionalDataDir, file), "utf-8");
-    fs.writeFileSync(path.resolve(APIWarframeDataDir, file), data);
-  }
-}
-
-async function downloadWarframeData(locale: string): Promise<void> {
-  if (!fs.existsSync(APIWarframeDataDir)) fs.mkdirSync(APIWarframeDataDir);
-  const response = await fetch(`https://origin.warframe.com/PublicExport/index_${locale}.txt.lzma`);
-  const data = await response.arrayBuffer();
-  const decompressedData = lzma.decompressFile(Buffer.from(data));
-  const arrFetching = Buffer.from(decompressedData)
-    .toString()
-    .split("\n")
-    .map((item) => item.replace(/\r/g, ""));
-
-  let locked = 0;
-
-  await Promise.all(
-    arrFetching.map(async (fetching) => {
-      try {
-        const response = await fetch(`https://content.warframe.com/PublicExport/Manifest/${fetching}`);
-        const data = await response.text();
-        const urlFetching = fetching.replace("Export", "").replace(/\.json.*/, "");
-        const firstKey = !fetching.includes("Manifest")
-          ? fetching.replace(/_.*/g, "")
-          : fetching.replace("Export", "").replace(/\..*/g, "");
-        const parsed = JSON.parse(data.replace(/\r/g, "\\r").replace(/\n/g, "\\n"))[firstKey].filter((data) => {
-          if (
-            data.uniqueName !== "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun" ||
-            locked < 1
-          ) {
-            if (data.uniqueName === "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun")
-              locked++;
-            return true;
-          } else {
-            return false;
-          }
-        });
-        const stringified = JSON.stringify(parsed, null, 2);
-
-        fs.writeFileSync(path.resolve(APIWarframeDataDir, `${urlFetching}.json`), stringified);
-      } catch (err) {
-        console.error(err);
-      }
-    })
-  );
-}
-
-async function readWarframeData(locale: string): Promise<any[]> {
-  const files = fs.readdirSync(APIWarframeDataDir);
-  const localizatedFiles = files.filter((file) => file.includes(`_${locale}`));
-
-  const allInOne: any[] = [];
-
-  for (const file of localizatedFiles) {
-    const data = fs.readFileSync(path.resolve(APIWarframeDataDir, file), "utf-8");
-    const parsed = JSON.parse(data);
-
-    if (Array.isArray(parsed)) {
-      allInOne.push(...parsed);
-    }
-  }
-
-  return allInOne;
-}
+const APIWarframeDataDir = path.resolve(__dirname, "../Output/APIWarframeData");
+const OutputDir = path.resolve(__dirname, "../Output");
+const AdditionalDataDir = path.resolve(__dirname, "../AdditionalData");
 
 /**
- * - Create and/or return Array/CSV/SQL File Warframe Public Export Data
+ * - Create and/or return Array/CSV/SQL/JSON File Warframe Public Export Data
+ * @template TypeReturn
  * @param {string[]} locales
- * @param {string} [typeReturn="CSV"] Buffer or Array
+ * @param {TypeReturn} [typeReturn="CSV"] Buffer or Array
  * @param {boolean} [mysql=false] Update duplicate for mysql
  * @return {*}  {(Promise<void | Buffer | csvData[]>)}
  * @example
  * generateData(["it", "ko"]) // create CSV file and return CSV file text with column uniqueName, jsonDataIT, jsonDataKO in Output folder
+ * generateData(["zh", "tc"], "JSON") // Loads JSONs from Warframe Public Export on Chinese mainland and Taiwan
  * generateData(["de", "es"], "SQL") // generate SQL file and return SQL file text with column uniqueName, jsonDataDE, jsonDataES
  * generateData(["de", "es"], "SQL", true) // Does the same as above, but adds duplicate update for mysql
  * generateData(["ru", "en"], "Array") // return Array data CSV file with column uniqueName, jsonDataRU, jsonDataEN, i.e
@@ -123,20 +42,28 @@ async function readWarframeData(locale: string): Promise<any[]> {
  * //]
  */
 
-async function generateData(
+enum TypesReturn {
+  CSV,
+  Array,
+  SQL,
+  JSON
+}
+
+async function generateData<TypeReturn = keyof typeof TypesReturn>(
   locales: string[],
-  typeReturn: string = "CSV",
-  mysql: boolean = false
+  typeReturn: TypeReturn,
+  mysql: boolean = false,
+  deleteDownloadedData: boolean = false
 ): Promise<string | csvData[]> {
   const itemsArr: any[][] = [];
 
   console.log("Wait collecting information...");
-  deleteDir();
+  deleteDir(OutputDir);
 
   for (const locale of locales) {
-    await downloadWarframeData(locale);
-    await addAdditional();
-    const data = await readWarframeData(locale);
+    await downloadWarframeData(locale, APIWarframeDataDir);
+    await addAdditionalData(AdditionalDataDir, APIWarframeDataDir);
+    const data = await readWarframeData(locale, APIWarframeDataDir);
     itemsArr.push(data);
   }
 
@@ -190,9 +117,11 @@ async function generateData(
 
   bar.stop();
 
-  const files = fs.readdirSync(APIWarframeDataDir);
-  await Promise.all(files.map((file) => fs.unlinkSync(path.resolve(APIWarframeDataDir, file))));
-  fs.rmdirSync(APIWarframeDataDir);
+  if (typeReturn !== "JSON" && deleteDownloadedData) {
+    const files = fs.readdirSync(APIWarframeDataDir);
+    await Promise.all(files.map((file) => fs.unlinkSync(path.resolve(APIWarframeDataDir, file))));
+    fs.rmdirSync(APIWarframeDataDir);
+  }
 
   switch (typeReturn) {
     case "Array": {
@@ -224,6 +153,11 @@ async function generateData(
       fs.writeFileSync(outputSQLPath, data, "utf-8");
       console.log(`File created ${outputSQLPath}`);
       return data;
+    }
+    case "JSON": {
+      const JSONsPath = path.resolve(__dirname, '../build/APIWarframeData/');
+      console.log(`JSONs Created ${JSONsPath}`);
+      return JSONsPath;
     }
     case "CSV": {
       const outputCSVPath = path.join(OutputDir, "output.csv");
